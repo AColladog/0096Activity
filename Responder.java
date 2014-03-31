@@ -21,6 +21,7 @@ public class Responder
     private HashSet<String> hs20;
     private HashSet<String> hs21;
     private HashSet<String> hs22;
+    private HashSet<String> hsInt;
     /**
      * Construct a Responder - nothing to do
      */
@@ -31,14 +32,12 @@ public class Responder
 
         hs11 = new HashSet<>();
         hs11.add("conexion");
-  
 
         hs20 = new HashSet<>();
         hs20.add("error");
 
         hs21 = new HashSet<>();
         hs21.add("factura");
-
 
         hm = new HashMap <>();
         hm.put(hs10,"Nos pondremos a trabajar en su averia");
@@ -54,6 +53,8 @@ public class Responder
         respuestas.add("Problemas en el pago");
         respuestas.add("Me gustaría poder ayudarle");
         respuestas.add("No se enfade");
+
+        hsInt = new HashSet<>();
     }
 
     /**
@@ -61,8 +62,7 @@ public class Responder
      * @return   A string that should be displayed as the response
      */
     public HashSet<String> generateResponse(HashSet<String> entrada){
-        HashSet<String> respuestaDevuelta = new HashSet<>(); 
-
+        HashSet<String> respuestaDevuelta = new HashSet<>();        
         for(HashSet<String> key: hm.keySet()){            
             Iterator<String> it = key.iterator();            
             while(it.hasNext()){
@@ -72,7 +72,18 @@ public class Responder
             }            
         }
         if(respuestaDevuelta.isEmpty()){
-            respuestaDevuelta.add( respuestas.get( aleatorio.nextInt(respuestas.size()) ) );
+            int valorAleatorio = 0;
+            boolean respuestaAleatoria = true;
+            while(respuestas.size() > 0 && respuestaAleatoria){    
+                valorAleatorio = aleatorio.nextInt(respuestas.size());
+                respuestaDevuelta.add(respuestas.get(valorAleatorio));               
+                respuestaAleatoria = false;
+            }
+            if(respuestas.size() == 0){
+                respuestaDevuelta.add("Perdone, pero no le he entendido");
+            }else{            
+                respuestas.remove(valorAleatorio);
+            }
         }
         return respuestaDevuelta;
     }
